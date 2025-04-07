@@ -7,7 +7,7 @@ import RecipeList from './recipeList';
 
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY!;
 const API_HOST = process.env.EXPO_PUBLIC_API_HOST!;
-const API_ID= process.env.EXPO_PUBLIC_API_ID!;
+const API_ID = process.env.EXPO_PUBLIC_API_ID!;
 
 interface CallAPIProps {
     ingredientString: string;
@@ -37,9 +37,10 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
             return;
         }
         setIngredients(ingredientString)
+        const encodedIngredients = encodeURIComponent(ingredients);
 
-        const url =  `${API_HOST}/api/recipes/v2?type=public&q=${ingredients}&app_id=${API_ID}&app_key=${API_KEY}`;
-
+        const url =  `${API_HOST}/api/recipes/v2?type=public&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
+        console.log("API URL:", url);
         try
         {
             const response = await fetch(url);
@@ -51,8 +52,8 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
 
             if (data.hits && data.hits.length > 0) 
             {
-                const firstFiveHits = data.hits.slice(0, 5);
-                setRecipes(firstFiveHits);
+                //const firstFiveHits = data.hits.slice(0, 5);
+                setRecipes(data.hits);
             } else
             {
                 setError("No recipes found for this selection.")

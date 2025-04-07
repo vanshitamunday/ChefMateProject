@@ -67,7 +67,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
       <TouchableOpacity style={styles.logoutButton} onPress={handleSearch}>
         <Text style={styles.logoutText}>Search</Text>
       </TouchableOpacity>
-      <CallAPI ingredientString={ingredients} triggerSearch={triggerSearch} resetTrigger={resetTrigger} />
+      {triggerSearch && (
+        <CallAPI 
+          ingredientString={ingredients} 
+          triggerSearch={triggerSearch} 
+          resetTrigger={resetTrigger} 
+        />
+      )}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
