@@ -39,9 +39,8 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         
         const encodedIngredients = encodeURIComponent(currentIngredients);
 
-        const url =  `${API_HOST}/api/recipes/v2?type=public&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
-        console.log("API URL:", url);
-        
+        const url =  `${API_HOST}?type=public&beta=false&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
+                
         try
         {
             const response = await fetch(url);
