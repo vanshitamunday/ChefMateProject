@@ -11,8 +11,7 @@ interface HomeScreenProps {
 const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   const router = useRouter();
   const [user, setUser] = useState<string | null>(userName);
-  const [triggerSearch, setTriggerSearch] = useState(false);
-  const [ingredients] = useState("chicken");
+
 
   useEffect(() => {
     if (!user) {
@@ -54,26 +53,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   };
 
   const handleSearch = async () => {
-    setTriggerSearch(true);
+    router.push("/findRecipe")
   };
-
-  const resetTrigger = () => {
-    setTriggerSearch(false);
-  };
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, {user || "Guest"}!</Text>
       <TouchableOpacity style={styles.logoutButton} onPress={handleSearch}>
-        <Text style={styles.logoutText}>Search</Text>
+        <Text style={styles.logoutText}>Let's Get Cooking!</Text>
       </TouchableOpacity>
-      {triggerSearch && (
-        <CallAPI 
-          ingredientString={ingredients} 
-          triggerSearch={triggerSearch} 
-          resetTrigger={resetTrigger} 
-        />
-      )}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>

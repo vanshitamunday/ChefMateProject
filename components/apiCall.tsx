@@ -14,57 +14,79 @@ interface CallAPIProps {
     triggerSearch: boolean;
     resetTrigger: () => void;
 }
-
-export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {
-    const [ingredients, setIngredients] = useState(' ');
+export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {    
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState(' ');
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
-        if (triggerSearch) {
-            searchRecipes();
-        }
-    }, [triggerSearch]);
+        if (triggerSearch) {            
+            searchRecipes(ingredientString);
+            resetTrigger();
+        }        
+    }, [triggerSearch, ingredientString, resetTrigger]);
 
-    const searchRecipes = async () => {
+    const searchRecipes = async (currentIngredients: string) => {
         setRecipes([]);
-        setError(' ');
+        setError('');
         setLoading(true);
 
-        if (!ingredients) {
+        if (!currentIngredients.trim()) {
             setError("Please retry your selection");
+            setLoading(false);
             return;
         }
-        setIngredients(ingredientString)
-        const encodedIngredients = encodeURIComponent(ingredients);
+        
+        const encodedIngredients = encodeURIComponent(currentIngredients);
 
         const url =  `${API_HOST}/api/recipes/v2?type=public&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
         console.log("API URL:", url);
+        
         try
         {
             const response = await fetch(url);
             if(!response.ok) 
             {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                const errorMessage = errorData?.message || `HTTP error! Status: ${response.status}`;
+                throw new Error(errorMessage);
             }
             const data = await response.json();
 
             if (data.hits && data.hits.length > 0) 
             {
-                //const firstFiveHits = data.hits.slice(0, 5);
-                setRecipes(data.hits);
+                const firstFiveHits = data.hits.slice(0, 5);
+                console.log(firstFiveHits);
+                setRecipes(firstFiveHits);
             } else
             {
                 setError("No recipes found for this selection.")
             }
-        } catch (err) {
-            setError(`Error fetching recipes: `); //${err.message} should be included
+        } catch (err: any) {
+            console.error("Caught error:", err);
+            setError(`Error fetching recipes: ${err.message}`);
         } finally {
             setLoading(false);
         }
+    };
+
+    if (loading) {
+        return(
+            <View>
+                <ActivityIndicator/>
+                <Text>Searching for recipes....</Text>
+            </View>
+        );
     }
 
+    if (error) {
+        return (
+            <View>
+                <Text>{error}</Text>
+            </View>
+        );
+    }
+    
     return (
         <View>
             <RecipeList recipes={recipes} />
