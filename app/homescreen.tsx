@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import supabase from "../lib/supabase";
+import CallAPI from "../components/apiCall";
 
 interface HomeScreenProps {
   userName: string | null;
@@ -10,6 +11,8 @@ interface HomeScreenProps {
 const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   const router = useRouter();
   const [user, setUser] = useState<string | null>(userName);
+  const [triggerSearch, setTriggerSearch] = useState(false);
+  const [ingredients] = useState("chicken");
 
   useEffect(() => {
     if (!user) {
@@ -50,10 +53,21 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
     router.replace("/");
   };
 
+  const handleSearch = async () => {
+    setTriggerSearch(true);
+  };
+
+  const resetTrigger = () => {
+    setTriggerSearch(false);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, {user || "Guest"}!</Text>
-
+      <TouchableOpacity style={styles.logoutButton} onPress={handleSearch}>
+        <Text style={styles.logoutText}>Search</Text>
+      </TouchableOpacity>
+      <CallAPI ingredientString={ingredients} triggerSearch={triggerSearch} resetTrigger={resetTrigger} />
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>

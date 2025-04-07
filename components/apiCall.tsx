@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import RecipeList from './recipeList';
 // When this component is called, it will send an API request to Edemam with the string created by the user using the app
@@ -9,12 +9,23 @@ const API_KEY = process.env.EXPO_PUBLIC_API_KEY!;
 const API_HOST = process.env.EXPO_PUBLIC_API_HOST!;
 const API_ID= process.env.EXPO_PUBLIC_API_ID!;
 
-export default function CallAPI() {
+interface CallAPIProps {
+    ingredientString: string;
+    triggerSearch: boolean;
+    resetTrigger: () => void;
+}
+
+export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {
     const [ingredients, setIngredients] = useState(' ');
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState(' ');
     const [loading, setLoading] = useState(false);
     
+    useEffect(() => {
+        if (triggerSearch) {
+            searchRecipes();
+        }
+    }, [triggerSearch]);
 
     const searchRecipes = async () => {
         setRecipes([]);
@@ -25,6 +36,7 @@ export default function CallAPI() {
             setError("Please retry your selection");
             return;
         }
+        setIngredients(ingredientString)
 
         const url =  `${API_HOST}/api/recipes/v2?type=public&q=${ingredients}&app_id=${API_ID}&app_key=${API_KEY}`;
 
