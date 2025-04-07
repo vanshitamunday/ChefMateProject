@@ -18,7 +18,7 @@ const Index = () => {
 
     const resetTrigger = () => {
         setTriggerSearch(false);
-      };
+    };
 
     return (
         <View>

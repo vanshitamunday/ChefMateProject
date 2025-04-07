@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 import RecipeList from './recipeList';
 // When this component is called, it will send an API request to Edemam with the string created by the user using the app
 // If there are any recipes returned, it will list the top 5 in a flat list that is touchable and will lead to the recipe on click.
@@ -14,13 +14,13 @@ interface CallAPIProps {
     triggerSearch: boolean;
     resetTrigger: () => void;
 }
-export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {    
+export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState(' ');
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
-        if (triggerSearch) {            
+        if (triggerSearch) {
             searchRecipes(ingredientString);
             resetTrigger();
         }        
@@ -40,7 +40,8 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         const encodedIngredients = encodeURIComponent(currentIngredients);
 
         const url =  `${API_HOST}?type=public&beta=false&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
-                
+        console.log(url);
+        
         try
         {
             const response = await fetch(url);
@@ -52,7 +53,7 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
             }
             const data = await response.json();
 
-            if (data.hits && data.hits.length > 0) 
+            if (data.hits && data.hits.length > 0)
             {
                 const firstFiveHits = data.hits.slice(0, 5);
                 console.log(firstFiveHits);
