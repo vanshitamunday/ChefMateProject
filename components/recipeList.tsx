@@ -15,6 +15,7 @@ import Recipe from './recipe';
         recipes: RecipeData [];
     }
     export default function RecipeList({ recipes }: RecipeListProps) {
+    console.log("RecipeList received recipes:", recipes);
     return (
         <View>
             <FlatList

@@ -13,7 +13,7 @@ export default function Recipe( {label, image, url}: RecipeProps ) {
     };
     return(
     <TouchableOpacity onPress={handlePress}>
-        <Image source={{ uri: image }}/>
+        <Image source={{ uri: "https://via.placeholder.com/150" }} style={{ width: 100, height: 100 }}/>
         <Text>{label}</Text>
     </TouchableOpacity>
     );

@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "react-native";
-import { useRouter } from "expo-router";
 import CallAPI from "../../components/apiCall";
+import RecipeList from "../../components/recipeList";
+import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 
-const Index = () => {
-    const [triggerSearch, setTriggerSearch] = useState(false);
-    const [ingredients, setIngredients] = useState('');
 
-    const handleSearchPress = () => {
-        if (ingredients.trim()) {
-            setTriggerSearch(true);
-        } else {
-            Alert.alert("Please enter ingredients to search.");
-        }
-    };
+export default function ReturnRecipe() {
+  const {ingredientString, triggerSearch, resetTrigger } = useLocalSearchParams();
 
-    const resetTrigger = () => {
-        setTriggerSearch(false);
-    };
+  const recipes = CallAPI({
+    ingredientString: ingredientString as string,
+    triggerSearch: triggerSearch === "true",
+    resetTrigger: () => {},
+  });
 
+  if (recipes && recipes.length > 0) {
     return (
-        <View>
-            <Text>Find a recipe</Text>
-            <TextInput
-                placeholder="Enter Ingredients (ex chicken)"
-                value={ingredients}
-                onChangeText={setIngredients}
-            />
-            <TouchableOpacity onPress={handleSearchPress}>
-                <Text>Search</Text>
-            </TouchableOpacity>
-
-            {triggerSearch && (
-                <CallAPI
-                    ingredientString={ingredients}
-                    triggerSearch={triggerSearch}
-                    resetTrigger={resetTrigger}
-                />
-            )}
-        </View>
+      <View>
+        <RecipeList recipes={recipes} />
+      </View>
+    )
+  } else if (recipes === null) {
+    return (
+      <View> 
+        <Text>Loading Error...</Text>
+      </View>
     );
-};
-
-export default Index;
-
+  } else {
+    return (
+      <View>
+        <Text>No recipes to display</Text>
+      </View>
+    )
+  }
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

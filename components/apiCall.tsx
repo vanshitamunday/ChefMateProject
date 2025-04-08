@@ -16,10 +16,11 @@ interface CallAPIProps {
 }
 export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {
     const [recipes, setRecipes] = useState([]);
-    const [error, setError] = useState(' ');
+    const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
+        console.log("CallAPI useEffect: triggerSearch =", triggerSearch);
         if (triggerSearch) {
             searchRecipes(ingredientString);
             resetTrigger();
@@ -32,6 +33,7 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         setLoading(true);
 
         if (!currentIngredients.trim()) {
+            console.log("CallAPI: searchRecipes called with", currentIngredients);
             setError("Please retry your selection");
             setLoading(false);
             return;
@@ -40,7 +42,7 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         const encodedIngredients = encodeURIComponent(currentIngredients);
 
         const url =  `${API_HOST}?type=public&beta=false&q=${encodedIngredients}&app_id=${API_ID}&app_key=${API_KEY}`;
-        console.log(url);
+        console.log("CallAPI: Fetching from", url);
         
         try
         {
@@ -52,11 +54,11 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
                 throw new Error(errorMessage);
             }
             const data = await response.json();
-
+            console.log("API Response:", data);
             if (data.hits && data.hits.length > 0)
             {
                 const firstFiveHits = data.hits.slice(0, 5);
-                console.log(firstFiveHits);
+                console.log("CallAPI: firstFiveHits", firstFiveHits);
                 setRecipes(firstFiveHits);
             } else
             {
@@ -65,31 +67,21 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         } catch (err: any) {
             console.error("Caught error:", err);
             setError(`Error fetching recipes: ${err.message}`);
+            console.log("CallAPI: Error message:", err.message);
         } finally {
             setLoading(false);
+            console.log("CallAPI: searchRecipes finished, loading =", loading, "error =", error);
         }
     };
 
-    if (loading) {
-        return(
-            <View>
-                <ActivityIndicator/>
-                <Text>Searching for recipes....</Text>
-            </View>
-        );
-    }
-
-    if (error) {
-        return (
-            <View>
-                <Text>{error}</Text>
-            </View>
-        );
-    }
-    
-    return (
-        <View>
-            <RecipeList recipes={recipes} />
-        </View>
-    )
+   if (loading){
+    console.log("CallAPI: Loading is true");
+    return null;
+   }
+   if (error){
+    console.log("CallAPI: Error is true:", error);
+    return null;
+   } 
+   console.log("CallAPI: Returning recipes:", recipes);
+   return recipes;
 }

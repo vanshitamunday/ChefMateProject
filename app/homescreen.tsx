@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import supabase from "../lib/supabase";
-import CallAPI from "../components/apiCall";
+
 
 interface HomeScreenProps {
   userName: string | null;
@@ -53,7 +53,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   };
 
   const handleSearch = async () => {
-    router.push("/findRecipe")
+    router.push("/index")
   };
   
 
