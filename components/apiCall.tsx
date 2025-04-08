@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
-import RecipeList from './recipeList';
+
 // When this component is called, it will send an API request to Edemam with the string created by the user using the app
 // If there are any recipes returned, it will list the top 5 in a flat list that is touchable and will lead to the recipe on click.
 // If there are none, it will return an error.
@@ -13,7 +12,10 @@ interface CallAPIProps {
     ingredientString: string;
     triggerSearch: boolean;
     resetTrigger: () => void;
+    setRecipes: (recipes: any[] | null) => void; // Add setRecipes prop
+    setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
+
 export default function CallAPI({ ingredientString, triggerSearch, resetTrigger }: CallAPIProps) {
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState<string | null>(null);
