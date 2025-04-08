@@ -26,7 +26,7 @@ export default function CallAPI({ ingredientString, triggerSearch, resetTrigger 
         if (triggerSearch) {
             searchRecipes(ingredientString);
             resetTrigger();
-        }        
+        }
     }, [triggerSearch, ingredientString, resetTrigger]);
 
     const searchRecipes = async (currentIngredients: string) => {
