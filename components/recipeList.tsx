@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import Recipe from './recipe';
 
