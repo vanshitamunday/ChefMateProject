@@ -1,42 +1,40 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "react-native";
-import CallAPI from "../../components/apiCall";
+import { View, Text, StyleSheet} from "react-native";
 import RecipeList from "../../components/recipeList";
 import { useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
-
-
+import { RecipeProps } from "../../interfaces/interfaces";
+import useApiCall from "../../hooks/useApiCall";
 
 export default function ReturnRecipe() {
   const {ingredientString, triggerSearch: triggerSearchParam } = useLocalSearchParams();
   const [hasSearched, setHasSearched] = useState(false);
-  const [recipes, setRecipes] = useState<any[] | null>(null);
+  const [recipes, setRecipes] = useState<RecipeProps[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (triggerSearchParam === 'true'){
-        setHasSearched(true);
-    }
-  }, [triggerSearchParam])
 
   const handleResetSearch = useCallback(() => {
     setHasSearched(false);
     setRecipes(null);
     setError(null);
-  }, []);  
+  }, []);
+
+  const triggerApiCall = useApiCall({
+    triggerSearch: true,
+    resetTrigger: handleResetSearch,
+    setRecipes,
+    setError
+  });
+
+  useEffect(() => {
+    if (triggerSearchParam === 'true'){
+        setHasSearched(true);
+        const ingredientsArray = Array.isArray(ingredientString) ? ingredientString : [ingredientString];
+        triggerApiCall(ingredientsArray);
+    }
+  }, [triggerSearchParam])
 
   return (
     <View>
-      {hasSearched && ingredientString && (
-        <CallAPI
-          ingredientString={ingredientString as string}
-          triggerSearch={true}
-          resetTrigger={handleResetSearch}
-          setRecipes={setRecipes}
-          setError={setError}
-        />        
-      )}
-
       {recipes && recipes.length > 0 && (
         <RecipeList recipes={recipes}/>
       )}
@@ -45,7 +43,7 @@ export default function ReturnRecipe() {
         <Text>Enter ingredients and search</Text>
       )}
 
-      {hasSearched && !recipes && !error && (
+      {hasSearched && recipes?.length === 0 && !error && (
         <Text>Loading recipes...</Text>
       )}
     </View>

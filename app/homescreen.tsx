@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import supabase from "../lib/supabase";
+import { HomeScreenProps } from "../interfaces/interfaces";
 
 
-interface HomeScreenProps {
-  userName: string | null;
-}
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   const router = useRouter();

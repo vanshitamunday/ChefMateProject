@@ -1,32 +1,24 @@
 import { View, FlatList, StyleSheet } from "react-native";
 import Recipe from './recipe';
+import { RecipeData } from '../interfaces/interfaces';
 
 
-    interface RecipeData {
-        recipe: {
-        label: string;
-        image: string;
-        url: string;
-        };
-    }
 
-    interface RecipeListProps {
-        recipes: RecipeData [];
-    }
-    export default function RecipeList({ recipes }: RecipeListProps) {
-    console.log("RecipeList received recipes:", recipes);
+    
+    export default function RecipeList({ recipes }: RecipeData) {
+    
     return (
         <View>
             <FlatList
                 data={recipes}
                 renderItem={({ item }) => (
                     <Recipe
-                        label={item.recipe.label}
-                        image={item.recipe.image}
-                        url={item.recipe.url}
+                        label={item.label}
+                        image={item.image}
+                        url={item.url}
                     />
                 )}
-                keyExtractor={(item) => item.recipe.url}
+                keyExtractor={(item) => item.url}
             />
         </View>
     );

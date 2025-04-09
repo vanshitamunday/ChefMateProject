@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "reac
 import { useRouter } from "expo-router";
 
 export default function SearchRecipes() {
-  const [ingredientString, setIngredientString] = useState("");
+  const [ingredientString, setIngredientString] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("")
   const router = useRouter();
 
   const handleSearchPress = () => {
-    if(ingredientString.trim()) {
+    if(ingredientString) {
       router.push({
         pathname: "/findRecipe/returnRecipe",
         params: {
@@ -19,18 +20,29 @@ export default function SearchRecipes() {
       Alert.alert("PLease enter ingredients.")
     }
   };
+  
+  const ingredientStringAdd = () => {
+    if(inputValue) {
+      setIngredientString([...ingredientString, inputValue]);
+      setInputValue("");
+    }
+  }
 
   return(
     <View>
-      <Text>Enter INgredients:</Text>
+      <Text>Enter Ingredients:</Text>
       <TextInput
           placeholder="e.g., chicken"
-          value={ingredientString}
-          onChangeText={setIngredientString}
+          value={inputValue}
+          onChangeText={setInputValue}
           />
+          <TouchableOpacity onPress={ingredientStringAdd}>
+            <Text>Add Ingredient</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleSearchPress}>
             <Text>Search Recipes</Text>
           </TouchableOpacity>
+          <Text>Current Ingredients: {ingredientString.join(", ")}</Text>
     </View>
   )
 }
