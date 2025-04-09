@@ -1,15 +1,15 @@
-import { Tabs } from "expo-router";
+import { Stack } from 'expo-router';
 
-export default function TabLayout() {
+export default function RecipesLayout() {
   return (
-    <Tabs>
-      <Tabs.Screen name="typeSelection" options={{ title: "Meal Type" }} />
-      <Tabs.Screen name="allergies" options={{ title: "Allergies" }} />
-      <Tabs.Screen name="mainItems" options={{ title: "Main Items" }} />
-      <Tabs.Screen name="vegetables" options={{ title: "Vegetables" }} />
-      <Tabs.Screen name="style" options={{ title: "Style" }} />
-      <Tabs.Screen name="searchRecipes" options={{ title: "Find Recipe" }} />
-      <Tabs.Screen name="returnRecipes" options={{ title: "Recipes"}} />
-    </Tabs>
+    <Stack>
+      <Stack.Screen name="typeSelection" options={{ title: 'Meal Type' }} />
+      <Stack.Screen name="allergies" options={{ title: 'Allergies' }} />
+      <Stack.Screen name="mainItems" options={{ title: 'Main Items' }} />
+      <Stack.Screen name="vegetables" options={{ title: 'Vegetables' }} />
+      <Stack.Screen name="style" options={{ title: 'Style' }} />
+      <Stack.Screen name="searchRecipes" options={{ title: 'Find Recipe' }} />
+      <Stack.Screen name="returnRecipes" options={{ title: 'Recipes' }} />
+    </Stack>
   );
 }
