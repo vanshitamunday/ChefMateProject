@@ -1,55 +1,128 @@
-import React, { useState} from 'react';
-import { Text, View } from "react-native";
-import { TouchableOpacity } from 'react-native';
+import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function TypeSelection(){
-    const [ingredientsString, setIngredientsString] = useState<string[]>([]);
-    const [type, selectType] = useState('');
+export default function TypeSelection() {
+  const router = useRouter();
 
-    const types = {
-        1 : 'dinner',
-        2 : 'breakfast',
-        3 : 'lunch',
-        4 : 'dessert',
-    }    
+  const handleTypePress = (mealType: string) => {
+    router.push({
+      pathname: '/findRecipe/allergies',
+      params: { mealType },
+    });
+  };
 
-    const handlePressDinner = () => {
-        selectType(types[1]);
-        setIngredientsString([...ingredientsString, type]);
-    };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Let’s Get Cooking!</Text>
 
-    const handlePressBreakfast = () => {
-        selectType(types[2]);
-        setIngredientsString([...ingredientsString, type]);
-    }
+      <View style={styles.imageWrapper}>
+        <Image
+          source={require('../../assets/ChefMateLogo.jpg')}
+          style={styles.image}
+        />
+      </View>
 
-    const handlePressLunch = () => {
-        selectType(types[3]);
-        setIngredientsString([...ingredientsString, type]);
-    }
+      <Text style={styles.subtitle}>What are you feeling?</Text>
 
-    const handlePressDessert = () => {
-        selectType(types[4]);
-        setIngredientsString([...ingredientsString, type]);
-    }
+      <View style={styles.optionsWrapper}>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => handleTypePress('breakfast')}
+        >
+          <Text style={styles.optionText}>➕ Breakfast</Text>
+        </TouchableOpacity>
 
-    
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => handleTypePress('lunch')}
+        >
+          <Text style={styles.optionText}>➕ Lunch</Text>
+        </TouchableOpacity>
 
-    return(
-        <View>
-            <Text>What do you feel like today?</Text>
-                <TouchableOpacity onPress={handlePressDinner}>
-                    <Text>Dinner</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handlePressBreakfast}>
-                    <Text>Lunch</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handlePressLunch}>
-                    <Text>Breakfast</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handlePressDessert}>
-                    <Text>Dessert</Text>
-                </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => handleTypePress('dinner')}
+        >
+          <Text style={styles.optionText}>➕ Dinner</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => handleTypePress('dessert')}
+        >
+          <Text style={styles.optionText}>➕ Dessert</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-    );
+  );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#FBE8D3',
+      padding: 24,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: '#3B3131',
+      marginTop: 40,
+      marginBottom: 20,
+    },
+    subtitle: {
+      fontSize: 20,
+      fontWeight: '500',
+      color: '#3B3131',
+      marginBottom: 20,
+    },
+    imageWrapper: {
+      backgroundColor: '#fff',
+      borderRadius: 20,
+      padding: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 3,
+      marginBottom: 20,
+    },
+    image: {
+      width: 160,
+      height: 160,
+      borderRadius: 12,
+    },
+    optionsWrapper: {
+      width: '100%',
+      backgroundColor: '#3B3131',
+      borderRadius: 20,
+      padding: 16,
+    },
+    optionButton: {
+      backgroundColor: '#fff',
+      paddingVertical: 12,
+      borderRadius: 12,
+      marginVertical: 6,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    optionText: {
+      fontSize: 18,
+      color: '#3B3131',
+      fontWeight: 'bold',
+    },
+  });
+  

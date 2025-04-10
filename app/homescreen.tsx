@@ -51,7 +51,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   };
 
   const handleSearch = async () => {
-    router.push("/findRecipe/searchRecipes")
+    router.push("/findRecipe/typeSelection")
   };
   
 

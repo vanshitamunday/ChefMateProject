@@ -50,7 +50,7 @@ function triggerApi(ingredientString: string[]) {
                 {
                     const firstFiveHits = data.hits.slice(0, 5);
                     console.log("CallAPI: firstFiveHits", firstFiveHits);
-                    setRecipes(firstFiveHits.map( r => r.recipe));
+                    setRecipes(firstFiveHits);
                 } else
                 {
                     setError("No recipes found for this selection.")

@@ -1,48 +1,148 @@
-import React, { useState} from 'react';
-import { Text, View, FlatList } from "react-native";
-import { TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
-export default function TypeSelection(){
-    const [healthRelated, setHealthRelated] = useState<string[]>([]);
+const { width } = Dimensions.get('window');
 
-    const healthTypes = {
-        1 : '&health=celery-free',
-        2 : '&health=seafood-free',
-        3 : '&health=dairy-free',
-        4 : '&health=egg-free',
-        5 : '&health=fish-free',
-        6 : '&health=gluten-free',
-        7 : '&health=lupine-free',
-        8 : '&health=mustard-free',
-        9 : '&health=peanut-free',
-        10 : '&health=sesame-free',
-        11 : '&health=shellfish-free',
-        12 : '&health=soy-free',
-        13 : '&health=tree-nut-free',
-        14 : '&health=wheat-free',
-    };
+const healthOptions = [
+  'celery-free',
+  'seafood-free',
+  'dairy-free',
+  'egg-free',
+  'fish-free',
+  'gluten-free',
+  'lupine-free',
+  'mustard-free',
+  'peanut-free',
+  'sesame-free',
+  'shellfish-free',
+  'soy-free',
+  'tree-nut-free',
+  'wheat-free',
+];
 
-    const handleHealthPress = (value: string) => {
-        if(healthRelated.includes(value)) {
-            setHealthRelated(healthRelated.filter((item) => item ! == value));
-        } else {
-            setHealthRelated([...healthRelated, value]);
-        }
-    };
+export default function Allergies() {
+  const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
+  const router = useRouter();
+  const { mealType } = useLocalSearchParams();
 
-    
+  const handleToggle = (item: string) => {
+    if (selectedAllergies.includes(item)) {
+      setSelectedAllergies(selectedAllergies.filter((a) => a !== item));
+    } else {
+      setSelectedAllergies([...selectedAllergies, item]);
+    }
+  };
 
-    return(
-        <View>
-            <FlatList
-                data={Object.entries(healthTypes)}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleHealthPress(item[1])}>
-                        <Text>{item[1]}</Text> 
-                    </TouchableOpacity>    
-                )}
-                keyExtractor={(item) => item[0]}
-            />
-    </View>
+  const handleNext = () => {
+    router.push({
+      pathname: '/findRecipe/searchRecipes',
+      params: {
+        mealType: mealType,
+        allergies: selectedAllergies.join(','),
+      },
+    });
+  };
+
+  const renderAllergy = ({ item }: { item: string }) => {
+    const isSelected = selectedAllergies.includes(item);
+
+    return (
+      <TouchableOpacity
+        style={[
+          styles.allergyButton,
+          isSelected && { backgroundColor: '#D94F30' },
+        ]}
+        onPress={() => handleToggle(item)}
+      >
+        <Text style={[styles.allergyText, isSelected && { color: '#fff' }]}>
+          ➕ {item.replace(/-/g, ' ').replace('free', 'free')}
+        </Text>
+      </TouchableOpacity>
     );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Any Allergies or{'\n'}restrictions?</Text>
+
+      <View style={styles.wrapper}>
+        <FlatList
+          data={healthOptions}
+          renderItem={renderAllergy}
+          keyExtractor={(item) => item}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+
+      <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+        <Text style={styles.nextText}>Next ➡️</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FBE8D3',
+    padding: 24,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#3B3131',
+    textAlign: 'center',
+    marginVertical: 24,
+  },
+  wrapper: {
+    width: '100%',
+    backgroundColor: '#3B3131',
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 20,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  allergyButton: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    width: (width - 96) / 2, 
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  allergyText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#3B3131',
+  },
+  nextButton: {
+    backgroundColor: '#D94F30',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+  },
+  nextText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+});
