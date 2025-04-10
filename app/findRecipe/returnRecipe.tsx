@@ -34,12 +34,10 @@ export default function ReturnRecipe() {
   useEffect(() => {
     if (triggerSearchParam === "true") {
       setHasSearched(true);
-
+      
       const ingredientsArray =
-        typeof ingredients === "string"
+        typeof ingredients === "string" && ingredients.trim() !== ""
           ? ingredients.split(",")
-          : Array.isArray(ingredients)
-          ? ingredients
           : [];
 
       const allergyArray =
@@ -47,13 +45,17 @@ export default function ReturnRecipe() {
 
       const mealTypeStr = typeof mealType === "string" ? mealType : "";
 
-      triggerApiCall({
-        ingredients: ingredientsArray,
-        allergies: allergyArray,
-        mealType: mealTypeStr,
-      });
+      if (ingredientsArray.length > 0) {
+        triggerApiCall({
+          ingredients: ingredientsArray,
+          allergies: allergyArray,
+          mealType: mealTypeStr,
+        });
+      } else {
+        setError("Please add ingredients to search for recipes.");
+      }
     }
-  }, [triggerSearchParam]);
+  }, [triggerSearchParam, ingredients, allergies, mealType]);
 
   return (
     <View style={styles.container}>

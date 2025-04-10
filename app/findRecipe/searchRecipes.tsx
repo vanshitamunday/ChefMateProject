@@ -53,12 +53,12 @@ export default function SearchRecipes() {
   };
 
   const handleIngredientSelect = (ingredient: string) => {
-    if (selectedIngredients.includes(ingredient)) {
+    if (!selectedIngredients.includes(ingredient)) {
+      setSelectedIngredients([...selectedIngredients, ingredient]);
+      setIngredientString([...new Set([...ingredientString, ingredient])]);  
+    } else {
       setSelectedIngredients(selectedIngredients.filter((item) => item !== ingredient));
       setIngredientString(ingredientString.filter((item) => item !== ingredient));
-    } else {
-      setSelectedIngredients([...selectedIngredients, ingredient]);
-      setIngredientString([...ingredientString, ingredient]); 
     }
   };
 

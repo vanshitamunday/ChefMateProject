@@ -14,27 +14,32 @@ export default function Vegetables() {
   const [vegetables, setVegetables] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const router = useRouter();
-  const { mealType, allergies} = useLocalSearchParams();
+  const { mealType, allergies, ingredientString } = useLocalSearchParams();
 
   const handleAdd = () => {
     const trimmed = inputValue.trim();
     if (trimmed && !vegetables.includes(trimmed)) {
-      setVegetables([...vegetables, trimmed]);
+      setVegetables((prev) => [...prev, trimmed]); 
       setInputValue('');
     }
   };
 
   const handleRemove = () => {
-    setVegetables((prev) => prev.slice(0, -1)); // remove last item
+    setVegetables((prev) => prev.slice(0, -1)); 
   };
 
   const handleSubmit = () => {
+    const combinedIngredients = [
+      ...(typeof ingredientString === 'string' ? ingredientString.split(',') : Array.isArray(ingredientString) ? ingredientString : []),
+      ...vegetables,
+    ];
+
     router.push({
       pathname: '/findRecipe/returnRecipe',
       params: {
         mealType,
         allergies,
-        ingredients: vegetables.join(','), // pass vegetables as comma string
+        ingredients: combinedIngredients.join(','), // Combine ingredients from previous and current
         triggerSearch: 'true',
       },
     });
