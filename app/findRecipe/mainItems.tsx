@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
-import { Text, View, FlatList } from "react-native";
-import { TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity } from "react-native";
+
 
 export default function TypeSelection(){
     const [ingredientString, setIngredientString] = useState<string[]>([]);
