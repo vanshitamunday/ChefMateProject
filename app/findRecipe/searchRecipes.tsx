@@ -11,9 +11,21 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Header from "../../components/header";
 
+const ingredientList = [
+  "Beef",
+  "Chicken",
+  "Lamb",
+  "Seafood",
+  "Fish",
+  "Beans",
+  "Pork",
+  "Eggs",
+];
+
 export default function SearchRecipes() {
   const [ingredientString, setIngredientString] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
 
   const router = useRouter();
   const { mealType, allergies } = useLocalSearchParams();
@@ -37,6 +49,16 @@ export default function SearchRecipes() {
     if (inputValue.trim()) {
       setIngredientString([...ingredientString, inputValue.trim()]);
       setInputValue("");
+    }
+  };
+
+  const handleIngredientSelect = (ingredient: string) => {
+    if (selectedIngredients.includes(ingredient)) {
+      setSelectedIngredients(selectedIngredients.filter((item) => item !== ingredient));
+      setIngredientString(ingredientString.filter((item) => item !== ingredient));
+    } else {
+      setSelectedIngredients([...selectedIngredients, ingredient]);
+      setIngredientString([...ingredientString, ingredient]); 
     }
   };
 
@@ -74,6 +96,31 @@ export default function SearchRecipes() {
         </View>
       )}
 
+      <Text style={styles.subtitle}>Choose an ingredient:</Text>
+      <View style={styles.ingredientButtonsWrapper}>
+        <FlatList
+          data={ingredientList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[
+                styles.ingredientButton,
+                selectedIngredients.includes(item) && { backgroundColor: "#4CAF50" },
+              ]}
+              onPress={() => handleIngredientSelect(item)}
+            >
+              <Text style={styles.ingredientButtonText}>
+                {selectedIngredients.includes(item) ? "✔️ " : "➕ "}
+                {item}
+              </Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+
       <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
         <Text style={styles.searchText}>Next ➡️</Text>
       </TouchableOpacity>
@@ -109,6 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     marginRight: 10,
+    fontSize: 16,
   },
   addButton: {
     backgroundColor: "#D94F30",
@@ -139,6 +187,35 @@ const styles = StyleSheet.create({
   ingredientText: {
     fontWeight: "600",
     color: "#333",
+  },
+  ingredientButtonsWrapper: {
+    marginBottom: 24,
+    backgroundColor: "#3B3131",
+    borderRadius: 20,
+    padding: 16,
+  },
+  ingredientButton: {
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    marginBottom: 12,
+    marginRight: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  ingredientButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#3B3131",
+    textAlign: "center",
+  },
+  row: {
+    justifyContent: "space-between",
+    marginBottom: 12,
   },
   searchButton: {
     backgroundColor: "#D94F30",
