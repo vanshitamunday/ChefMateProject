@@ -41,18 +41,16 @@ export default function ReturnRecipe() {
           ? ingredients
           : [];
 
-      const mealTypeStr = typeof mealType === "string" ? mealType : "";
       const allergyArray =
         typeof allergies === "string" ? allergies.split(",") : [];
 
-      // Combine everything into a query array
-      const fullQueryArray = [
-        ...ingredientsArray,
-        ...allergyArray.map((a) => `&health=${a}`),
-        `&mealType=${mealTypeStr}`,
-      ];
+      const mealTypeStr = typeof mealType === "string" ? mealType : "";
 
-      triggerApiCall(fullQueryArray);
+      triggerApiCall({
+        ingredients: ingredientsArray,
+        allergies: allergyArray,
+        mealType: mealTypeStr,
+      });
     }
   }, [triggerSearchParam]);
 

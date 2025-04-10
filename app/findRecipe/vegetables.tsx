@@ -13,7 +13,7 @@ export default function Vegetables() {
   const [vegetables, setVegetables] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const router = useRouter();
-  const { mealType, healthOptions } = useLocalSearchParams();
+  const { mealType, allergies} = useLocalSearchParams();
 
   const handleAdd = () => {
     const trimmed = inputValue.trim();
@@ -31,8 +31,8 @@ export default function Vegetables() {
     router.push({
       pathname: '/findRecipe/returnRecipe',
       params: {
-        mealType: mealType,
-        allergies: healthOptions,
+        mealType,
+        allergies,
         ingredients: vegetables.join(','), // pass vegetables as comma string
         triggerSearch: 'true',
       },

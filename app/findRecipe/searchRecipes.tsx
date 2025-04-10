@@ -15,7 +15,7 @@ export default function SearchRecipes() {
   const [inputValue, setInputValue] = useState("");
 
   const router = useRouter();
-  const { mealType, healthOptions } = useLocalSearchParams();
+  const { mealType, allergies } = useLocalSearchParams();
 
   const handleSearchPress = () => {
     if (ingredientString.length > 0) {
@@ -23,7 +23,7 @@ export default function SearchRecipes() {
         pathname: "/findRecipe/vegetables",
         params: {
           mealType,
-          allergies: healthOptions, // already comma-separated from previous screen
+          allergies,
           ingredientString: ingredientString.join(","),
         },
       });

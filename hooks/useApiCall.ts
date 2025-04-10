@@ -4,36 +4,35 @@ const API_KEY = process.env.EXPO_PUBLIC_API_KEY!;
 const API_HOST = process.env.EXPO_PUBLIC_API_HOST!;
 const API_ID = process.env.EXPO_PUBLIC_API_ID!;
 
+interface QueryParams {
+  ingredients: string[];
+  allergies: string[];
+  mealType: string;
+}
+
 export default function useApiCall({
   triggerSearch,
   resetTrigger,
   setRecipes,
   setError,
 }: CallAPIProps) {
-  function triggerApi(queryArray: string[]) {
-    console.log("CallAPI useEffect: triggerSearch =", triggerSearch);
-
-    const searchRecipes = async (queryParams: string[]) => {
+  function triggerApi({ ingredients, allergies, mealType }: QueryParams) {
+    const searchRecipes = async () => {
       setRecipes([]);
       setError("");
 
-      if (!queryParams || queryParams.length === 0) {
-        console.log("CallAPI: searchRecipes called with empty query");
+      if (!ingredients || ingredients.length === 0) {
         setError("Please retry your selection");
         return;
       }
 
-      const searchKeywords = queryParams.filter(
-        (item) => !item.startsWith("&")
-      ).join(" ");
+      const searchKeywords = ingredients.map(encodeURIComponent).join(" ");
+      const allergyParams = allergies.map((a) => `&health=${a}`).join("");
+      const mealTypeParam = mealType ? `&mealType=${mealType}` : "";
 
-      const filters = queryParams.filter((item) => item.startsWith("&")).join("");
+      const url = `${API_HOST}?type=public&beta=false&q=${searchKeywords}${allergyParams}${mealTypeParam}&app_id=${API_ID}&app_key=${API_KEY}`;
 
-      const url = `${API_HOST}?type=public&beta=false&q=${encodeURIComponent(
-        searchKeywords
-      )}${filters}&app_id=${API_ID}&app_key=${API_KEY}`;
-
-      console.log("CallAPI: Fetching from", url);
+      console.log("Fetching from:", url);
 
       try {
         const response = await fetch(url);
@@ -48,7 +47,6 @@ export default function useApiCall({
 
         if (data.hits && data.hits.length > 0) {
           const firstFiveHits = data.hits.slice(0, 5);
-          console.log("CallAPI: firstFiveHits", firstFiveHits);
           setRecipes(firstFiveHits);
         } else {
           setError("No recipes found for this selection.");
@@ -60,7 +58,7 @@ export default function useApiCall({
     };
 
     if (triggerSearch) {
-      searchRecipes(queryArray);
+      searchRecipes();
       resetTrigger();
     }
   }
