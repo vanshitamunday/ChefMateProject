@@ -28,15 +28,22 @@ export default function useApiCall({
       
       const searchKeywords = ingredients.map(encodeURIComponent).join(" ");
 
-      const allergyParams = allergies
-        .map((a) => `&health=${encodeURIComponent(a)}`)
-        .join("");
+      let allergyParams = "";
+      if (allergies && allergies.length > 0) {
+        allergyParams = allergies
+          .map((a) => `&health=${encodeURIComponent(a)}`)
+          .join("");
+      }
 
       const mealTypeParam = mealType ? `&mealType=${encodeURIComponent(mealType)}` : "";
 
-      const url = `${API_HOST}?type=public&beta=false&q=${searchKeywords}${allergyParams}${mealTypeParam}&app_id=${API_ID}&app_key=${API_KEY}`;
+      let url = `${API_HOST}?type=public&beta=false&q=${searchKeywords}${mealTypeParam}&app_id=${API_ID}&app_key=${API_KEY}`;
 
-      console.log("Fetching from:", url);
+      
+      if (allergyParams) {
+        url += allergyParams;
+      }
+      
 
       try {
         const response = await fetch(url);
