@@ -6,7 +6,13 @@ import { RecipeHit } from "../../interfaces/interfaces";
 import useApiCall from "../../hooks/useApiCall";
 
 export default function ReturnRecipe() {
-  const { ingredients, triggerSearch: triggerSearchParam } = useLocalSearchParams();
+  const {
+    ingredients,
+    triggerSearch: triggerSearchParam,
+    allergies,
+    mealType,
+  } = useLocalSearchParams();
+
   const [hasSearched, setHasSearched] = useState(false);
   const [recipes, setRecipes] = useState<RecipeHit[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,13 +33,26 @@ export default function ReturnRecipe() {
   useEffect(() => {
     if (triggerSearchParam === "true") {
       setHasSearched(true);
-      const ingredientsArray = typeof ingredients === "string"
-        ? ingredients.split(",")
-        : Array.isArray(ingredients)
-        ? ingredients
-        : [];
 
-      triggerApiCall(ingredientsArray);
+      const ingredientsArray =
+        typeof ingredients === "string"
+          ? ingredients.split(",")
+          : Array.isArray(ingredients)
+          ? ingredients
+          : [];
+
+      const mealTypeStr = typeof mealType === "string" ? mealType : "";
+      const allergyArray =
+        typeof allergies === "string" ? allergies.split(",") : [];
+
+      // Combine everything into a query array
+      const fullQueryArray = [
+        ...ingredientsArray,
+        ...allergyArray.map((a) => `&health=${a}`),
+        `&mealType=${mealTypeStr}`,
+      ];
+
+      triggerApiCall(fullQueryArray);
     }
   }, [triggerSearchParam]);
 
@@ -51,17 +70,15 @@ export default function ReturnRecipe() {
       <View style={styles.recipeSection}>
         <Text style={styles.sectionTitle}>Recipes</Text>
 
-        {recipes && recipes.length > 0 && (
-          <RecipeList recipes={recipes} />
-        )}
+        {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
 
-        {error && (
-          <Text style={styles.errorText}>⚠️ {error}</Text>
-        )}
+        {error && <Text style={styles.errorText}>⚠️ {error}</Text>}
 
         {hasSearched && recipes?.length === 0 && !error && (
           <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Searching for delicious recipes...</Text>
+            <Text style={styles.loadingText}>
+              Searching for delicious recipes...
+            </Text>
           </View>
         )}
       </View>
