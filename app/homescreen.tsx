@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import supabase from "../lib/supabase";
+import { HomeScreenProps } from "../interfaces/interfaces";
 
-interface HomeScreenProps {
-  userName: string | null;
-}
+
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   const router = useRouter();
   const [user, setUser] = useState<string | null>(userName);
+
 
   useEffect(() => {
     if (!user) {
@@ -50,10 +50,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
     router.replace("/");
   };
 
+  const handleSearch = async () => {
+    router.push("/findRecipe/typeSelection")
+  };
+  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, {user || "Guest"}!</Text>
-
+      <TouchableOpacity style={styles.logoutButton} onPress={handleSearch}>
+        <Text style={styles.logoutText}>Let's Get Cooking!</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
