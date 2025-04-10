@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import Header from '../../components/header';
 
 const { width } = Dimensions.get('window');
 
@@ -71,6 +72,7 @@ export default function Allergies() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Any Allergies or{'\n'}restrictions?</Text>
 
       <View style={styles.wrapper}>
@@ -104,6 +106,7 @@ const styles = StyleSheet.create({
     color: '#3B3131',
     textAlign: 'center',
     marginVertical: 24,
+    marginTop: 80,
   },
   wrapper: {
     width: '100%',

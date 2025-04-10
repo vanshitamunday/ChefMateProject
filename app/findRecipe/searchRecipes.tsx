@@ -9,6 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import Header from "../../components/header";
 
 export default function SearchRecipes() {
   const [ingredientString, setIngredientString] = useState<string[]>([]);
@@ -41,6 +42,7 @@ export default function SearchRecipes() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>What Ingredients Do You Have?</Text>
 
       <View style={styles.inputRow}>
@@ -90,6 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "bold",
     color: "#D94F30",
+    marginTop: 60,
     marginBottom: 20,
     textAlign: "center",
   },

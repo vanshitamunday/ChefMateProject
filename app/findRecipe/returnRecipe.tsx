@@ -4,6 +4,7 @@ import RecipeList from "../../components/recipeList";
 import { useLocalSearchParams } from "expo-router";
 import { RecipeHit } from "../../interfaces/interfaces";
 import useApiCall from "../../hooks/useApiCall";
+import Header from "../../components/header";
 
 export default function ReturnRecipe() {
   const {
@@ -56,6 +57,7 @@ export default function ReturnRecipe() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Eat up!</Text>
 
       <View style={styles.mascotWrapper}>
@@ -97,7 +99,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#3B3131",
     textAlign: "center",
-    marginBottom: 16,
+    marginBottom: 15,
+    marginTop: 30,
   },
   mascotWrapper: {
     alignItems: "center",

@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import Header from '../../components/header';
 
 export default function Vegetables() {
   const [vegetables, setVegetables] = useState<string[]>([]);
@@ -47,6 +48,7 @@ export default function Vegetables() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Any vegetables or{'\n'}grains?</Text>
 
       <View style={styles.chipBox}>
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
     color: '#3B3131',
     textAlign: 'center',
     marginBottom: 20,
+    marginTop: 60,
   },
   chipBox: {
     backgroundColor: '#fff',
