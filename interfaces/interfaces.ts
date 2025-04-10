@@ -11,7 +11,7 @@ export interface RecipeData {
 export interface CallAPIProps {    
     triggerSearch: boolean;
     resetTrigger: () => void;
-    setRecipes: (recipes: any[] | null) => void; // Add setRecipes prop
+    setRecipes: (recipes: RecipeHit[] | null) => void; 
     setError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 

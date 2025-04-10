@@ -3,6 +3,7 @@
     "name": "ChefMate",
     "slug": "ChefMate",
     "plugins": [["expo-router"]],
+    "scheme": "chefmate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

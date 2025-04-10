@@ -7,6 +7,7 @@ import {
   Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import Header from '../../components/header';
 
 export default function TypeSelection() {
   const router = useRouter();
@@ -18,8 +19,13 @@ export default function TypeSelection() {
     });
   };
 
+  const handleBackToHome = () => {
+    router.push('/');
+  };
+
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Let’s Get Cooking!</Text>
 
       <View style={styles.imageWrapper}>
@@ -60,6 +66,14 @@ export default function TypeSelection() {
           <Text style={styles.optionText}>➕ Dessert</Text>
         </TouchableOpacity>
       </View>
+
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={handleBackToHome}
+      >
+        <Text style={styles.backButtonText}>Back to Home</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -76,7 +90,7 @@ const styles = StyleSheet.create({
       fontSize: 28,
       fontWeight: 'bold',
       color: '#3B3131',
-      marginTop: 40,
+      marginTop: 50,
       marginBottom: 20,
     },
     subtitle: {
@@ -124,5 +138,17 @@ const styles = StyleSheet.create({
       color: '#3B3131',
       fontWeight: 'bold',
     },
+    backButton: {
+      backgroundColor: '#D94F30',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 12,
+      marginTop: 30,
+    },
+      backButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 18,
+      },
   });
   

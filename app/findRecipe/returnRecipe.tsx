@@ -4,9 +4,16 @@ import RecipeList from "../../components/recipeList";
 import { useLocalSearchParams } from "expo-router";
 import { RecipeHit } from "../../interfaces/interfaces";
 import useApiCall from "../../hooks/useApiCall";
+import Header from "../../components/header";
 
 export default function ReturnRecipe() {
-  const { ingredients, triggerSearch: triggerSearchParam } = useLocalSearchParams();
+  const {
+    ingredients,
+    triggerSearch: triggerSearchParam,
+    allergies,
+    mealType,
+  } = useLocalSearchParams();
+
   const [hasSearched, setHasSearched] = useState(false);
   const [recipes, setRecipes] = useState<RecipeHit[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,18 +34,32 @@ export default function ReturnRecipe() {
   useEffect(() => {
     if (triggerSearchParam === "true") {
       setHasSearched(true);
-      const ingredientsArray = typeof ingredients === "string"
-        ? ingredients.split(",")
-        : Array.isArray(ingredients)
-        ? ingredients
-        : [];
+      
+      const ingredientsArray =
+        typeof ingredients === "string" && ingredients.trim() !== ""
+          ? ingredients.split(",")
+          : [];
 
-      triggerApiCall(ingredientsArray);
+      const allergyArray =
+        typeof allergies === "string" ? allergies.split(",") : [];
+
+      const mealTypeStr = typeof mealType === "string" ? mealType : "";
+
+      if (ingredientsArray.length > 0) {
+        triggerApiCall({
+          ingredients: ingredientsArray,
+          allergies: allergyArray,
+          mealType: mealTypeStr,
+        });
+      } else {
+        setError("Please add ingredients to search for recipes.");
+      }
     }
-  }, [triggerSearchParam]);
+  }, [triggerSearchParam, ingredients, allergies, mealType]);
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Eat up!</Text>
 
       <View style={styles.mascotWrapper}>
@@ -51,17 +72,15 @@ export default function ReturnRecipe() {
       <View style={styles.recipeSection}>
         <Text style={styles.sectionTitle}>Recipes</Text>
 
-        {recipes && recipes.length > 0 && (
-          <RecipeList recipes={recipes} />
-        )}
+        {recipes && recipes.length > 0 && <RecipeList recipes={recipes} />}
 
-        {error && (
-          <Text style={styles.errorText}>⚠️ {error}</Text>
-        )}
+        {error && <Text style={styles.errorText}>⚠️ {error}</Text>}
 
         {hasSearched && recipes?.length === 0 && !error && (
           <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Searching for delicious recipes...</Text>
+            <Text style={styles.loadingText}>
+              Searching for delicious recipes...
+            </Text>
           </View>
         )}
       </View>
@@ -82,7 +101,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#3B3131",
     textAlign: "center",
-    marginBottom: 16,
+    marginBottom: 15,
+    marginTop: 30,
   },
   mascotWrapper: {
     alignItems: "center",

@@ -8,32 +8,38 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import Header from '../../components/header';
 
 export default function Vegetables() {
   const [vegetables, setVegetables] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const router = useRouter();
-  const { mealType, healthOptions } = useLocalSearchParams();
+  const { mealType, allergies, ingredientString } = useLocalSearchParams();
 
   const handleAdd = () => {
     const trimmed = inputValue.trim();
     if (trimmed && !vegetables.includes(trimmed)) {
-      setVegetables([...vegetables, trimmed]);
+      setVegetables((prev) => [...prev, trimmed]); 
       setInputValue('');
     }
   };
 
   const handleRemove = () => {
-    setVegetables((prev) => prev.slice(0, -1)); // remove last item
+    setVegetables((prev) => prev.slice(0, -1)); 
   };
 
   const handleSubmit = () => {
+    const combinedIngredients = [
+      ...(typeof ingredientString === 'string' ? ingredientString.split(',') : Array.isArray(ingredientString) ? ingredientString : []),
+      ...vegetables,
+    ];
+
     router.push({
       pathname: '/findRecipe/returnRecipe',
       params: {
-        mealType: mealType,
-        allergies: healthOptions,
-        ingredients: vegetables.join(','), // pass vegetables as comma string
+        mealType,
+        allergies,
+        ingredients: combinedIngredients.join(','), // Combine ingredients from previous and current
         triggerSearch: 'true',
       },
     });
@@ -47,6 +53,7 @@ export default function Vegetables() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.title}>Any vegetables or{'\n'}grains?</Text>
 
       <View style={styles.chipBox}>
@@ -97,6 +104,7 @@ const styles = StyleSheet.create({
     color: '#3B3131',
     textAlign: 'center',
     marginBottom: 20,
+    marginTop: 60,
   },
   chipBox: {
     backgroundColor: '#fff',
