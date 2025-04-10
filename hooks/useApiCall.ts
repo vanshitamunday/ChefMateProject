@@ -25,10 +25,14 @@ export default function useApiCall({
         setError("Please retry your selection");
         return;
       }
-
+      
       const searchKeywords = ingredients.map(encodeURIComponent).join(" ");
-      const allergyParams = allergies.map((a) => `&health=${a}`).join("");
-      const mealTypeParam = mealType ? `&mealType=${mealType}` : "";
+
+      const allergyParams = allergies
+        .map((a) => `&health=${encodeURIComponent(a)}`)
+        .join("");
+
+      const mealTypeParam = mealType ? `&mealType=${encodeURIComponent(mealType)}` : "";
 
       const url = `${API_HOST}?type=public&beta=false&q=${searchKeywords}${allergyParams}${mealTypeParam}&app_id=${API_ID}&app_key=${API_KEY}`;
 
