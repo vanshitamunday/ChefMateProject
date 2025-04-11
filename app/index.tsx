@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Sign_In from "../components/login";
 import Welcome from "./homescreen";
 import supabase from "../lib/supabase";
+import { SafeAreaView } from 'react-native';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
@@ -38,13 +39,13 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isSignedIn ? (
         <Welcome userName={userName} />
       ) : (
         <Sign_In setIsSignedIn={setIsSignedIn} onSignInSuccess={handleSignIn} />
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Header from "../../components/header";
+import { SafeAreaView } from 'react-native';
 
 const ingredientList = [
   "Beef",
@@ -63,7 +64,7 @@ export default function SearchRecipes() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>What Ingredients Do You Have?</Text>
 
@@ -124,7 +125,7 @@ export default function SearchRecipes() {
       <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
         <Text style={styles.searchText}>Next ➡️</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

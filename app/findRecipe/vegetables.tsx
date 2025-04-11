@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Header from '../../components/header';
+import { SafeAreaView } from 'react-native';
 
 export default function Vegetables() {
   const [vegetables, setVegetables] = useState<string[]>([]);
@@ -52,7 +53,7 @@ export default function Vegetables() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>Any vegetables or{'\n'}grains?</Text>
 
@@ -88,7 +89,7 @@ export default function Vegetables() {
       <TouchableOpacity style={styles.nextButton} onPress={handleSubmit}>
         <Text style={styles.nextText}>Search Recipes 🍲</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

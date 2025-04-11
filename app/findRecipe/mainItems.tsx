@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
-
+import { SafeAreaView } from 'react-native';
 
 export default function TypeSelection(){
     const [ingredientString, setIngredientString] = useState<string[]>([]);
@@ -27,7 +27,7 @@ export default function TypeSelection(){
     
 
     return(
-        <View>
+        <SafeAreaView>
             <FlatList
                 data={Object.entries(mainMeal)}
                 renderItem={({ item }) => (
@@ -37,6 +37,6 @@ export default function TypeSelection(){
                 )}
                 keyExtractor={(item) => item[0]}
             />
-    </View>
+    </SafeAreaView>
     );
 }

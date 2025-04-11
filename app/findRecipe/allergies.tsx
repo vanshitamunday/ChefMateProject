@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Header from '../../components/header';
+import { SafeAreaView } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -71,7 +72,7 @@ export default function Allergies() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>Any Allergies or{'\n'}restrictions?</Text>
 
@@ -89,7 +90,7 @@ export default function Allergies() {
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextText}>Next ➡️</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
