@@ -7,7 +7,7 @@ export default function RecipesLayout() {
       <Stack.Screen name="allergies" options={{ title: 'Allergies' }} />
       <Stack.Screen name="mainItems" options={{ title: 'Main Items' }} />
       <Stack.Screen name="vegetables" options={{ title: 'Vegetables' }} />
-      <Stack.Screen name="returnRecipes" options={{ title: 'Recipes' }} />
+      <Stack.Screen name="returnRecipe" options={{ title: 'Recipes' }} />
     </Stack>
   );
 }

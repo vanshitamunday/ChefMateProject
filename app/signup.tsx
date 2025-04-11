@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import supabase from "../lib/supabase";
+import { SafeAreaView } from 'react-native';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -58,7 +59,7 @@ const SignUp = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Create Your ChefMate Account</Text>
 
       <TextInput
@@ -97,7 +98,7 @@ const SignUp = () => {
       <TouchableOpacity style={styles.textButton} onPress={() => router.push("/")}>
         <Text style={styles.textLink}>Already have an account? Sign In</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

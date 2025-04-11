@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Header from '../../components/header';
+import { SafeAreaView } from 'react-native';
 
 export default function TypeSelection() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function TypeSelection() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>Let’s Get Cooking!</Text>
 
@@ -74,7 +75,7 @@ export default function TypeSelection() {
         <Text style={styles.backButtonText}>Back to Home</Text>
       </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
   );
 }
 

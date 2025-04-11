@@ -5,6 +5,7 @@ import { useLocalSearchParams } from "expo-router";
 import { RecipeHit } from "../../interfaces/interfaces";
 import useApiCall from "../../hooks/useApiCall";
 import Header from "../../components/header";
+import { SafeAreaView } from 'react-native';
 
 export default function ReturnRecipe() {
   const {
@@ -58,7 +59,7 @@ export default function ReturnRecipe() {
   }, [triggerSearchParam, ingredients, allergies, mealType]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Text style={styles.title}>Eat up!</Text>
 
@@ -84,7 +85,7 @@ export default function ReturnRecipe() {
           </View>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

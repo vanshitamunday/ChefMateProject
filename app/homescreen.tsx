@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import supabase from "../lib/supabase";
 import { HomeScreenProps } from "../interfaces/interfaces";
 import Header from '../components/header';
+import { SafeAreaView } from 'react-native';
 
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY!;
 const API_HOST = process.env.EXPO_PUBLIC_API_HOST!;
@@ -92,7 +93,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header/>
       {/* Welcome Message */}
       <Text style={styles.title}>Welcome, {user || "Guest"}!</Text>
@@ -130,7 +131,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ userName }) => {
         <Text style={styles.getCookingText}>Let's Get Cooking!</Text>
       </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
   );
 };
 
